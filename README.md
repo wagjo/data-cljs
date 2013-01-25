@@ -29,7 +29,14 @@ Specialized functions (e.g. for arrays and vectors) are placed directly in cloju
 namespace and are given a strange names (alength, subvec). This library provides separate
 namespace for each data structure.
 
-Notable functions include:
+Functions are provided for following data structures:
+* Javascript Array
+* Javascript String
+* PersistentVector (for now, most functions there are very slow)
+* Finger Tree
+* miscellaneous functions for characters
+
+Notable functionalities include:
 * fast eager variants of map and map-indexed
 * fast variants of reduce and reduce-kv
 * reduce-reverse and reduce-kv-reverse
