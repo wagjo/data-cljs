@@ -35,7 +35,7 @@
   Faster variant of clojure.core/empty?."
   [v]
   (or (nil? v)
-      (zero? (-seq v))))
+      (not (-seq v))))
 
 (defn count
   "Returns the number of items in the vector.
@@ -211,7 +211,7 @@
   ;; TODO: use flexvec here
   (let [pre (subvec v 0 index)
         suf (subvec v (+ index n))]
-    (into (conj pre val) suf)))
+    (into (conj (or pre (empty)) val) suf)))
 
 (defn splice-arr
   "Returns new vector with n items starting at index pos
@@ -221,7 +221,7 @@
   ;; TODO: use flexvec here
   (let [pre (subvec v 0 index)
         suf (subvec v (+ index n))]
-    (into (into pre (seq val-arr)) suf)))
+    (into (into (or pre (empty)) (seq val-arr)) suf)))
 
 (defn insert-before
   "Returns a new vector with val inserted before index."
@@ -240,7 +240,7 @@
   ;; TODO: use flexvec here
   (let [pre (subvec v 0 index)
         suf (subvec v (inc index))]
-    (into pre suf)))
+    (into (or pre (empty)) suf)))
 
 (defn remove-n
   "Returns new vector with n items starting at index position
@@ -250,7 +250,7 @@
   ;; TODO: use flexvec here
   (let [pre (subvec v 0 index)
         suf (subvec v (+ index n))]
-    (into pre suf)))
+    (into (or pre (empty)) suf)))
 
 (defn rip
   "Returns result of ripping vector at index pos.

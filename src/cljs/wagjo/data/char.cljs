@@ -11,8 +11,7 @@
 ;; You must not remove this notice, or any other, from this software.
 
 (ns wagjo.data.char
-  "Char manipulation."
-  (:require [goog.string :as gs]))
+  "Char manipulation.")
 
 ;;;; Public API
 

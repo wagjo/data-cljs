@@ -108,8 +108,8 @@
   [a]
   (if (empty? a)
     (throw "Cannot pop empty array or nil!")
-    (.pop a))
-  nil)
+    (do (.pop a)
+        nil)))
 
 (defn assoc!
   "Sets the val at index. Mutates input array.
@@ -159,7 +159,7 @@
   [a index n axs]
   (let [sfn (.-splice a)
         ar (array index n)]
-    (.apply sfn a (.concat ar axs))))
+    (.apply sfn a (.concat ar (or axs (array))))))
 
 (defn insert-before!
   "Inserts x into array a at index.
@@ -235,7 +235,7 @@
   "Returns new array which is a concatenation of a1 and a2.
   Eager version of clojure.core/concat."
   [a1 a2]
-  (.concat a1 a2))
+  (.concat a1 (or a2 (array))))
 
 (defn popl
   "Returns new array without first item. If the array is empty,
@@ -372,7 +372,7 @@
 (defn sew
   "Returns sewed array. Kinda opposite of rip."
   [pre-arr item-arr suf-arr]
-  (.concat pre-arr item-arr suf-arr))
+  (.concat pre-arr (or item-arr (array)) (or suf-arr (array))))
 
 (defn triml
   "Returns new array with n items trimmed from left."
