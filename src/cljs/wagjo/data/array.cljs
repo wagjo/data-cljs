@@ -27,6 +27,11 @@
 
 ;;; Access
 
+(defn ^boolean array?
+  "Returns true if a is an array."
+  [a]
+  (instance? js/Array a))
+
 (defn ^boolean empty?
   "Returns true if a is empty array or nil.
   Faster variant of clojure.core/empty?."
@@ -434,6 +439,21 @@
             (recur nval (inc i))))
         val))))
 
+(defn reduce2
+  "Array reduce without starting value.
+  Faster variant of clojure.core/reduce."
+  [f a]
+  (if (empty? a)
+    (let [r (f)] (if (reduced? r) @r r))
+    (loop [val (aget a 0)
+           i 1]
+      (if (< i (.-length a))
+        (let [nval (f val (aget a i))]
+          (if (reduced? nval)
+            @nval
+            (recur nval (inc i))))
+        val))))
+
 (defn reduce-reverse
   "Reverse array reduce. Very fast."
   [f init a]
@@ -447,6 +467,22 @@
           (recur nval i)))
       val)))
 
+(defn reduce2-reverse
+  "Reverse array reduce without starting value.
+  Very fast."
+  [f a]
+  (if (empty? a)
+    (let [r (f)] (if (reduced? r) @r r))
+    (loop [val (aget a (dec (.-length a)))
+           i (dec (.-length a))]
+      (if (pos? i)
+        (let [i (dec i)
+              nval (f val (aget a i))]
+          (if (reduced? nval)
+            @nval
+            (recur nval i)))
+        val))))
+
 (defn reduce-kv
   "Array reduce-kv. Faster variant of clojure.core/reduce-kv."
   [f init a]
@@ -454,6 +490,21 @@
     init
     (loop [val init
            i 0]
+      (if (< i (.-length a))
+        (let [nval (f val i (aget a i))]
+          (if (reduced? nval)
+            @nval
+            (recur nval (inc i))))
+        val))))
+
+(defn reduce2-kv
+  "Array reduce-kv, without starting value.
+  Faster variant of clojure.core/reduce-kv."
+  [f a]
+  (if (empty? a)
+    (let [r (f)] (if (reduced? r) @r r))
+    (loop [val (aget a 0)
+           i 1]
       (if (< i (.-length a))
         (let [nval (f val i (aget a i))]
           (if (reduced? nval)
@@ -473,6 +524,21 @@
           @nval
           (recur nval i)))
       val)))
+
+(defn reduce2-kv-reverse
+  "Reverse array reduce. Very fast."
+  [f a]
+  (if (empty? a)
+    (let [r (f)] (if (reduced? r) @r r))
+    (loop [val (aget a (dec (.-length a)))
+           i (dec (.-length a))]
+      (if (pos? i)
+        (let [i (dec i)
+              nval (f val i (aget a i))]
+          (if (reduced? nval)
+            @nval
+            (recur nval i)))
+        val))))
 
 (defn index-of
   "Returns index of val inside a.

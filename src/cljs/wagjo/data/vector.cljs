@@ -17,7 +17,7 @@
 
 ;;;; Implementation details
 
-(def empty-vector [])
+(def ^:const empty-vector [])
 
 ;;;; Public API
 
@@ -308,20 +308,46 @@
   [f init v]
   (-reduce v f init))
 
+(defn reduce2
+  "Vector reduce without starting value.
+  Faster variant of clojure.core/reduce."
+  [f v]
+  (-reduce v f))
+
 (defn reduce-reverse
   "Reverse vector reduce. Very slow."
   [f init v]
   (reduce f init (rseq v)))
+
+(defn reduce2-reverse
+  "Reverse vector reduce without starting value. Very slow."
+  [f v]
+  (reduce f (rseq v)))
 
 (defn reduce-kv
   "Vector reduce-kv. Faster variant of clojure.core/reduce-kv."
   [f init v]
   (-kv-reduce v f init))
 
+(defn reduce2-kv
+  "Vector reduce-kv without starting value.
+  Faster variant of clojure.core/reduce-kv."
+  [f v]
+  (if (empty? v)
+    (let [r (f)] (if (reduced? r) @r r))
+    (-kv-reduce (popl v) f (peekl v))))
+
 (defn reduce-kv-reverse
   "Reverse vector reduce. Very slow."
   [f init v]
   (-kv-reduce (vec (rseq v)) f init))
+
+(defn reduce2-kv-reverse
+  "Reverse vector reduce-kv without starting value. Very slow."
+  [f v]
+  (if (empty? v)
+    (let [r (f)] (if (reduced? r) @r r))
+    (-kv-reduce (vec (rseq (popr v))) f (peekr v))))
 
 (defn index-of
   "Returns index of val inside v.

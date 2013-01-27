@@ -20,7 +20,7 @@
 
 ;;; Creation
 
-(def empty-string "")
+(def ^:const empty-string "")
 
 (defn empty
   "Returns an empty string."
@@ -28,6 +28,11 @@
   empty-string)
 
 ;;; Access
+
+(defn ^boolean string?
+  "Returns true if s is a string."
+  [s]
+  (clojure.core/string? s))
 
 (defn ^boolean empty?
   "Returns true if s is an empty string or nil.
@@ -364,6 +369,21 @@
             (recur nval (inc i))))
         val))))
 
+(defn reduce2
+  "String reduce without starting value.
+  Faster variant of clojure.core/reduce."
+  [f s]
+  (if (empty? s)
+    (let [r (f)] (if (reduced? r) @r r))
+    (loop [val (.charAt s 0)
+           i 1]
+      (if (< i (.-length s))
+        (let [nval (f val (.charAt s i))]
+          (if (reduced? nval)
+            @nval
+            (recur nval (inc i))))
+        val))))
+
 (defn reduce-reverse
   "Reverse string reduce. Very fast."
   [f init s]
@@ -377,6 +397,21 @@
           (recur nval i)))
       val)))
 
+(defn reduce2-reverse
+  "Reverse string reduce, without starting value. Very fast."
+  [f s]
+  (if (empty? s)
+    (let [r (f)] (if (reduced? r) @r r))
+    (loop [val (.charAt s (dec (.-length s)))
+           i (dec (.-length s))]
+      (if (pos? i)
+        (let [i (dec i)
+              nval (f val (.charAt s i))]
+          (if (reduced? nval)
+            @nval
+            (recur nval i)))
+        val))))
+
 (defn reduce-kv
   "String reduce-kv. Faster variant of clojure.core/reduce-kv."
   [f init s]
@@ -384,6 +419,21 @@
     init
     (loop [val init
            i 0]
+      (if (< i (.-length s))
+        (let [nval (f val i (.charAt s i))]
+          (if (reduced? nval)
+            @nval
+            (recur nval (inc i))))
+        val))))
+
+(defn reduce2-kv
+  "String reduce-kv without starting value.
+  Faster variant of clojure.core/reduce-kv."
+  [f s]
+  (if (empty? s)
+    (let [r (f)] (if (reduced? r) @r r))
+    (loop [val (.charAt s 0)
+           i 1]
       (if (< i (.-length s))
         (let [nval (f val i (.charAt s i))]
           (if (reduced? nval)
@@ -403,6 +453,21 @@
           @nval
           (recur nval i)))
       val)))
+
+(defn reduce2-kv-reverse
+  "Reverse string reduce, without starting value. Very fast."
+  [f s]
+  (if (empty? s)
+    (let [r (f)] (if (reduced? r) @r r))
+    (loop [val (.charAt s (dec (.-length s)))
+           i (dec (.-length s))]
+      (if (pos? i)
+        (let [i (dec i)
+              nval (f val i (.charAt s i))]
+          (if (reduced? nval)
+            @nval
+            (recur nval i)))
+        val))))
 
 (defn index-of
   "Returns index of search-string inside string.

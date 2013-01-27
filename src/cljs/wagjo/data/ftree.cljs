@@ -1349,7 +1349,7 @@
       (and (instance? TransientDigit digit)
            (== (.-l digit) 4))))
 
-(def empty-tree (EmptyTree.))
+(def ^:const empty-tree (EmptyTree.))
 
 ;;;; Public API
 
@@ -1361,6 +1361,13 @@
   empty-tree)
 
 ;;; Access
+
+(defn ^boolean ftree?
+  "Returns true if t is a ftree."
+  [t]
+  (or (instance? EmptyTree t)
+      (instance? SingleTree t)
+      (instance? DeepTree t)))
 
 (defn ^boolean empty?
   "Returns true if a is empty tree or nil.
@@ -1652,6 +1659,15 @@
     (let [r (.ft-reduce t f init 0)]
       (if (reduced? r) @r r))))
 
+(defn reduce2
+  "Tree reduce without starting value.
+  Faster variant of clojure.core/reduce."
+  [f t]
+  (let [r (if (empty? t)
+            (f)
+            (.ft-reduce (.ft-popl t) f (.ft-peekl t) 0))]
+    (if (reduced? r) @r r)))
+
 (defn reduce-reverse
   "Reverse tree reduce. Very fast."
   [f init t]
@@ -1659,6 +1675,14 @@
     init
     (let [r (.ft-reduce-reverse t f init 0)]
       (if (reduced? r) @r r))))
+
+(defn reduce2-reverse
+  "Reverse tree reduce without starting value. Very fast."
+  [f t]
+  (let [r (if (empty? t)
+            (f)
+            (.ft-reduce-reverse (.ft-popr t) f (.ft-peekr t) 0))]
+    (if (reduced? r) @r r)))
 
 (defn reduce-kv
   "Tree reduce-kv. Faster variant of clojure.core/reduce-kv."
@@ -1668,6 +1692,15 @@
     (let [r (.ft-reduce-kv t f init 0 0)]
       (if (reduced? r) @r r))))
 
+(defn reduce2-kv
+  "Tree reduce-kv without starting value.
+  Faster variant of clojure.core/reduce-kv."
+  [f t]
+  (let [r (if (empty? t)
+            (f)
+            (.ft-reduce-kv (.ft-popl t) f (.ft-peekl t) 0 0))]
+    (if (reduced? r) @r r)))
+
 (defn reduce-kv-reverse
   "Reverse tree reduce-kv. Very fast."
   [f init t]
@@ -1675,6 +1708,15 @@
     init
     (let [r (.ft-reduce-kv-reverse t f init (dec (.ft-count t)) 0)]
       (if (reduced? r) @r r))))
+
+(defn reduce2-kv-reverse
+  "Reverse tree reduce-kv without starting value. Very fast."
+  [f t]
+  (let [r (if (empty? t)
+            (f)
+            (.ft-reduce-kv-reverse (.ft-popr t) f (.ft-peekr t)
+                                   (- (.ft-count t) 2) 0))]
+    (if (reduced? r) @r r)))
 
 (defn index-of
   "Returns index of val inside t.
