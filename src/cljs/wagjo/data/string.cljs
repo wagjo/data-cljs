@@ -13,7 +13,7 @@
 (ns wagjo.data.string
   "String manipulation."
   (:refer-clojure :exclude [empty empty? count nth peek pop assoc
-                            split-at conj reduce reduce-kv])
+                            split-at conj reduce reduce-kv string?])
   (:require [goog.string :as gs]))
 
 ;;;; Public API

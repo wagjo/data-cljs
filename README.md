@@ -107,9 +107,13 @@ functions.
 * _mape [f o]_ - eager version of clojure.core/map
 * _mape-indexed [f o]_ - eager version of clojure.core/map-indexed
 * _reduce [f init o]_ - faster version of clojure.core/reduce
+* _reduce2 [f o]_ - faster version of clojure.core/reduce
 * _reduce-reverse [f init o]_ - like reduce but in reverse order
+* _reduce2-reverse [f o]_ - like reduce but in reverse order
 * _reduce-kv [f init o]_ - faster version of clojure.core/reduce-kv
+* _reduce2-kv [f o]_ - faster version of clojure.core/reduce-kv
 * _reduce-kv-reverse [f init o]_ - like reduce-kv but in reverse order
+* _reduce2-kv-reverse [f o]_ - like reduce-kv but in reverse order
 * _index-of [o val]_ - search for val inside o
 * _index-of-from [o val index-from]_ - index-of, starting at index-from
 

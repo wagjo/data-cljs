@@ -13,7 +13,7 @@
 (ns wagjo.data.vector
   "Vector manipulation."
   (:refer-clojure :exclude [empty empty? count nth peek pop assoc
-                            split-at conj reduce reduce-kv]))
+                            split-at conj reduce reduce-kv vector?]))
 
 ;;;; Implementation details
 
@@ -29,6 +29,11 @@
   empty-vector)
 
 ;;; Access
+
+(defn ^boolean vector?
+  "Returns true if v is a vector."
+  [v]
+  (clojure.core/vector? v))
 
 (defn ^boolean empty?
   "Returns true if v is empty vector or nil.
@@ -322,7 +327,7 @@
 (defn reduce2-reverse
   "Reverse vector reduce without starting value. Very slow."
   [f v]
-  (reduce f (rseq v)))
+  (reduce2 f (rseq v)))
 
 (defn reduce-kv
   "Vector reduce-kv. Faster variant of clojure.core/reduce-kv."
