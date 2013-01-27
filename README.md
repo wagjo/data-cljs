@@ -24,7 +24,7 @@ in separate namespaces. Faster variants does not have plymorphism
 nor multiple arities.
 
 Nearly every data manipulation function works with seqs. In ClojureScript, this
-is very slow, e.g. for use in games (see [Chris Grangers talk](http://www.youtube.com/watch?v=V1Eu9vZaDYw)).
+is very slow, e.g. for use in games (see [Chris Granger's talk](http://www.youtube.com/watch?v=V1Eu9vZaDYw)).
 Specialized functions (e.g. for arrays and vectors) are placed directly in clojure.core
 namespace and are given a strange names (alength, subvec). This library provides separate
 namespace for each data structure.
@@ -40,11 +40,11 @@ Notable functionalities include:
 * fast eager variants of map and map-indexed
 * fast variants of reduce and reduce-kv
 * reduce-reverse and reduce-kv-reverse
-* finger trees
+* finger trees supporting standard clojure fns (conj, seq, count, nth, assoc, reduce, ...)
 
 This library provides a fast finger tree implementation. Until 
 https://github.com/michalmarczyk/flexvec gets ported to CLJS, finger trees
-are good candidate for data structure whic provides fast insert/remove.
+are good candidate for data structure which provides fast insert/remove.
 
 Note that most of functions for persistent vector are very slow. This too will be fixed when
 flexvec gets ported.
