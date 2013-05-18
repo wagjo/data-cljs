@@ -11,7 +11,8 @@
 ;; You must not remove this notice, or any other, from this software.
 
 (ns wagjo.data.char
-  "Char manipulation.")
+  "Char manipulation."
+  (:refer-clojure :exclude [char]))
 
 ;;;; Public API
 
