@@ -157,6 +157,20 @@
   [s-seq]
   (clojure.core/reduce cat2 "" s-seq))
 
+(defn cat-arr
+  "Returns concatenation of array of string.
+  Is faster than clojure.core/str."
+  [s-arr]
+  (if (nil? s-arr)
+    ""
+    (let [r ""]
+      (loop [i 0]
+        (if (< i (.-length s-arr))
+          (let [s (aget s-arr i)]
+            (js* "~{} += ~{}" r s)
+            (recur (inc i)))
+          r)))))
+
 ;;; Modify
 
 (defn slice

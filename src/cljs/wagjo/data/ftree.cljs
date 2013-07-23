@@ -16,7 +16,7 @@
   (:require-macros [wagjo.data.ftree :as ftm])
   (:refer-clojure :exclude [empty empty? count nth peek pop assoc
                             conj split-at reduce reduce-kv assoc!
-                            conj! pop!])
+                            conj! pop! into])
   (:require [wagjo.data.array :as ua]))
 
 ;;;; Implementation details
@@ -1734,3 +1734,8 @@
                             (reduced (+ index index-from))
                             -1))]
     (reduce-kv f -1 t)))
+
+(defn into
+  [t xs]
+  (.ft-persistent (clojure.core/reduce #(.ft-conjr %1 %2)
+                                       (.ft-transient t) xs)))
